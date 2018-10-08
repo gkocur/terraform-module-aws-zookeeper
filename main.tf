@@ -16,7 +16,7 @@
 
 data "aws_ami" "zookeeper" {
   most_recent = true
-  name_regex  = "^${var.prefix}${var.name}-.*-(\\d{14})$"
+  name_regex  = "^${var.prefix}${var.name}-.*-\\(\\d{14}\\)$"
   owners      = ["self"]
   filter {
     name   = "architecture"
@@ -112,6 +112,7 @@ resource "aws_autoscaling_group" "zookeeper" {
 }
 
 resource "aws_launch_configuration" "zookeeper" {
+  count    = "${var.use_asg ? 1 : 0}"
   associate_public_ip_address = false
   iam_instance_profile        = "${aws_iam_instance_profile.zookeeper_eni.arn}"
   image_id                    = "${data.aws_ami.zookeeper.id}"
