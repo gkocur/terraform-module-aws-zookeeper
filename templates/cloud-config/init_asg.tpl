@@ -16,8 +16,10 @@ manage_etc_hosts: true
 write_files:
   - content: |
       #!/bin/bash
-      echo "=== Setting Variables ==="
       __AWS_METADATA_ADDR__="169.254.169.254"
+      echo "=== Configuring aws-cli ==="
+      aws configure set region $(curl http://$${__AWS_METADATA_ADDR__}/latest/dynamic/instance-identity/document|grep region|awk -F\" '{print $4}')
+      echo "=== Setting Variables ==="
       __MAC_ADDRESS__="$$(curl -s http://$${__AWS_METADATA_ADDR__}/latest/meta-data/network/interfaces/macs/ | awk '{print $$1}')"
       __INSTANCE_ID__=$$(curl -s http://$${__AWS_METADATA_ADDR__}/latest/meta-data/instance-id)
       __SUBNET_ID__="$$(curl -s http://$${__AWS_METADATA_ADDR__}/latest/meta-data/network/interfaces/macs/$${__MAC_ADDRESS__}subnet-id)"

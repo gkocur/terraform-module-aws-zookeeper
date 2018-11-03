@@ -10,6 +10,16 @@
 # terms of the MIT License.
 #
 
+variable "stack" {
+  description = "The name of the stack the cluster belongs to, only used for cost allocation tracking"
+  type        = "string"
+}
+
+variable "environment" {
+  description = "The name of the environment the cluster belongs to, only used for cost allocation tracking"
+  type        = "string"
+}
+
 variable "ami_name" {
   description = "The name of the AMI to use for the instance(s)."
   default     = "zookeeper"
